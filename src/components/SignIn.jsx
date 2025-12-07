@@ -1,13 +1,15 @@
 import React, { useState, useRef } from "react";
 import Header from "./Header";
 import { validateSignInData } from "../utils/validate";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../utils/firebaseConfig";
 
 const SignIn = () => {
 	const backgroundImageUrl =
 		"https://assets.nflxext.com/ffe/siteui/vlv3/4ffe3d37-1fc1-4d93-b61a-1fa58c11ccff/web/IN-en-20251124-TRIFECTA-perspective_9f00d07d-f08e-494f-8907-92371138c534_large.jpg";
 
 	const [isSignedIn, setIsSignedIn] = useState(true);
-	const [errorMessage, setErrorMessage] = useState(null);
+	const [errorMessage, setErrorMessage] = useState("");
 	const email = useRef(null);
 	const password = useRef(null);
 
@@ -16,11 +18,29 @@ const SignIn = () => {
 	};
 
 	const handleSignIn = () => {
-		const message = validateSignInData(
-			email.current.value,
-			password.current.value
-		);
+		const userEmail = email.current.value;
+		const userPassword = password.current.value;
+
+		const message = validateSignInData(userEmail, userPassword);
 		setErrorMessage(message);
+		if (message) return;
+
+		if (!isSignedIn) {
+			//Sign Up
+			createUserWithEmailAndPassword(auth, userEmail, userPassword)
+				.then((userCredential) => {
+					const user = userCredential.user;
+					console.log(user);
+				})
+				.catch((firebaseError) => {
+					const firebaseErrorCode = firebaseError.code;
+					const firebaseErrorMessage = firebaseError.message;
+					setErrorMessage(firebaseErrorMessage + "-" + firebaseErrorCode);
+				});
+		} else {
+			//Sign In
+			signInWithEmailAndPassword(auth, userEmail, userPassword);
+		}
 	};
 
 	return (
@@ -46,9 +66,11 @@ const SignIn = () => {
 				<p className="text-4xl font-semibold mb-8">
 					{isSignedIn ? "Sign In" : "Sign Up"}
 				</p>
-				<p className="text-red-600 font-semibold mb-2">
-					{"!! " + errorMessage + " !!"}
-				</p>
+				{errorMessage && (
+					<p className="text-red-600 font-semibold mb-2">
+						{"!! " + errorMessage + " !!"}
+					</p>
+				)}
 				{!isSignedIn && (
 					<input
 						type="text"
