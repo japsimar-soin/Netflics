@@ -1,7 +1,10 @@
 import React, { useState, useRef } from "react";
 import Header from "./Header";
 import { validateSignInData } from "../utils/validate";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import {
+	createUserWithEmailAndPassword,
+	signInWithEmailAndPassword,
+} from "firebase/auth";
 import { auth } from "../utils/firebaseConfig";
 
 const SignIn = () => {
@@ -35,6 +38,7 @@ const SignIn = () => {
 				.catch((firebaseError) => {
 					const firebaseErrorCode = firebaseError.code;
 					const firebaseErrorMessage = firebaseError.message;
+					console.log(firebaseErrorMessage + " " + firebaseErrorCode);
 					setErrorMessage(firebaseErrorMessage + "-" + firebaseErrorCode);
 				});
 		} else {
