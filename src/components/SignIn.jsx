@@ -4,17 +4,18 @@ import { validateSignInData } from "../utils/validate";
 import {
 	createUserWithEmailAndPassword,
 	signInWithEmailAndPassword,
+	updateProfile,
 } from "firebase/auth";
 import { auth } from "../utils/firebaseConfig";
+import { useNavigate } from "react-router-dom";
+import { NETFLICS_BACKGROUND, USER_ICON } from "../utils/constants";
 
 const SignIn = () => {
-	const backgroundImageUrl =
-		"https://assets.nflxext.com/ffe/siteui/vlv3/4ffe3d37-1fc1-4d93-b61a-1fa58c11ccff/web/IN-en-20251124-TRIFECTA-perspective_9f00d07d-f08e-494f-8907-92371138c534_large.jpg";
-
 	const [isSignedIn, setIsSignedIn] = useState(true);
 	const [errorMessage, setErrorMessage] = useState("");
 	const email = useRef(null);
 	const password = useRef(null);
+	const navigate = useNavigate();
 
 	const toggleSignIn = () => {
 		setIsSignedIn(!isSignedIn);
@@ -33,16 +34,20 @@ const SignIn = () => {
 			createUserWithEmailAndPassword(auth, userEmail, userPassword)
 				.then((userCredential) => {
 					const user = userCredential.user;
-					console.log(user);
+					return updateProfile(userCredential.user, {
+						photoURL: USER_ICON,
+					});
+				})
+				.then(() => {
+					navigate("/browse");
 				})
 				.catch((firebaseError) => {
 					const firebaseErrorCode = firebaseError.code;
 					const firebaseErrorMessage = firebaseError.message;
-					console.log(firebaseErrorMessage + " " + firebaseErrorCode);
+					// console.log(firebaseErrorMessage + " " + firebaseErrorCode);
 					setErrorMessage(firebaseErrorMessage + "-" + firebaseErrorCode);
 				});
 		} else {
-			//Sign In
 			signInWithEmailAndPassword(auth, userEmail, userPassword);
 		}
 	};
@@ -52,7 +57,7 @@ const SignIn = () => {
 			<div className="absolute inset-0 z-0">
 				<img
 					className="h-full w-full object-cover"
-					src={backgroundImageUrl}
+					src={NETFLICS_BACKGROUND}
 					alt="Movies in SignIn Background"
 				/>
 			</div>

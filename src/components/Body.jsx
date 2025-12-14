@@ -1,25 +1,27 @@
 import React from "react";
 import SignIn from "./SignIn";
 import Browse from "./Browse";
-import { createBrowserRouter, Router, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import AuthWatcher from "./AuthWatcher";
+
+const appRouter = createBrowserRouter([
+	{
+		element: <AuthWatcher />, // 👈 auth logic here
+		children: [
+			{
+				path: "/",
+				element: <SignIn />,
+			},
+			{
+				path: "/browse",
+				element: <Browse />,
+			},
+		],
+	},
+]);
 
 const Body = () => {
-	const appRouter = createBrowserRouter([
-		{
-			path: "/",
-			element: <SignIn />,
-		},
-		{
-			path: "/browse",
-			element: <Browse />,
-		},
-	]);
-
-	return (
-		<div>
-			<RouterProvider router={appRouter} />
-		</div>
-	);
+	return <RouterProvider router={appRouter} />;
 };
 
 export default Body;
