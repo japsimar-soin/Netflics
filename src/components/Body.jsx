@@ -6,7 +6,7 @@ import AuthWatcher from "./AuthWatcher";
 
 const appRouter = createBrowserRouter([
 	{
-		element: <AuthWatcher />, // 👈 auth logic here
+		element: <AuthWatcher />, 
 		children: [
 			{
 				path: "/",
