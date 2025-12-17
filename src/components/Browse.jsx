@@ -13,17 +13,20 @@ const Browse = () => {
 	usePopularMovies();
 
 	return (
-		<div className="relative min-h-screen bg-black overflow-x-hidden">
-			<Header />
-			{searchView ? (
-				<AISearch />
-			) : (
-				<>
-					<MainContainer />
-					<SecondaryContainer />
-				</>
-			)}
-		</div>
+		<div className="min-h-screen bg-black text-white">
+      <Header />
+
+      <main className="pt-20">
+        {searchView ? (
+          <AISearch />
+        ) : (
+          <>
+            <MainContainer />
+            <SecondaryContainer />
+          </>
+        )}
+      </main>
+    </div>
 	);
 };
 

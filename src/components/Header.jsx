@@ -35,8 +35,8 @@ const Header = () => {
 	};
 
 	return (
-		<div className="sticky top-0 z-20 w-full px-4 md:px-16 py-4 md:py-10 flex flex-col md:flex-row justify-between ">
-			<div className="flex flex-col items-center gap-4 md:flex-row md:justify-between">
+<div className="absolute top-0 left-0 z-30 w-full px-4 md:px-16 py-4">
+<div className="flex flex-col items-center gap-4 md:flex-row md:justify-between">
 				<img className="w-40 md:w-48" src={NETFLICS_LOGO} alt="Netflics logo" />
 
 				{user && (
